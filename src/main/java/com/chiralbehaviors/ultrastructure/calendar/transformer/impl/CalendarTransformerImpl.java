@@ -15,21 +15,48 @@
  */
 package com.chiralbehaviors.ultrastructure.calendar.transformer.impl;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import com.chiralbehaviors.CoRE.kernel.Kernel;
 import com.chiralbehaviors.CoRE.time.Interval;
 import com.chiralbehaviors.ultrastructure.calendar.transformer.CalendarTransformer;
+import com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace;
 
 /**
  * @author hparry
  *
  */
 public class CalendarTransformerImpl implements CalendarTransformer {
+    
+    private CalendarWorkspace workspace;
+    private Kernel kernel;
 
+    public static final String DEFAULT_DATE_FORMAT = "yyyy.MM.dd HH:mm:ss:SSS z";
     /* (non-Javadoc)
      * @see com.chiralbehaviors.ultrastructure.calendar.transformer.CalendarTransformer#getInterval(java.util.Calendar)
      */
     public Interval getInterval(Calendar calendar) {
+        Interval existing = find(calendar);
+        if (existing != null) {
+            return existing;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
+        Interval interval = new Interval(sdf.format(calendar.getTime()));
+        long dateInMillis = calendar.getTimeInMillis();
+        interval.setStart(BigDecimal.valueOf(dateInMillis));
+        interval.setStartUnit(workspace.getMillisSinceEpoch());
+        interval.setDuration(null);
+        interval.setDurationUnit(kernel.getNotApplicableUnit());
+        return interval;
+    }
+
+    /**
+     * @param calendar
+     * @return
+     */
+    private Interval find(Calendar calendar) {
         // TODO Auto-generated method stub
         return null;
     }

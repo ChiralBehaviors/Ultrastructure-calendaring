@@ -15,6 +15,7 @@
  */
 package com.chiralbehaviors.ultrastructure.calendar.workspace;
 
+import com.chiralbehaviors.CoRE.attribute.unit.Unit;
 import com.chiralbehaviors.CoRE.network.Relationship;
 import com.chiralbehaviors.CoRE.time.Interval;
 
@@ -268,6 +269,14 @@ public class CalendarWorkspaceBootstrap implements CalendarWorkspace {
      * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getYearOf()
      */
     public Relationship getYearOf() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /* (non-Javadoc)
+     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getMillisSinceEpoch()
+     */
+    public Unit getMillisSinceEpoch() {
         // TODO Auto-generated method stub
         return null;
     }
