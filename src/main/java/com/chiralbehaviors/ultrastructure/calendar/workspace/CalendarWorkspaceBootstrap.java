@@ -281,4 +281,12 @@ public class CalendarWorkspaceBootstrap implements CalendarWorkspace {
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getMilliseconds()
+     */
+    public Unit getMilliseconds() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

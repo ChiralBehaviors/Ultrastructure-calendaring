@@ -63,10 +63,10 @@ public interface CalendarWorkspace {
     Relationship getMonthOf();
     Relationship getInYear();
     Relationship getYearOf();
-    /**
-     * @return
-     */
+
+    //units
     Unit getMillisSinceEpoch();
+    Unit getMilliseconds();
     
 
 }
