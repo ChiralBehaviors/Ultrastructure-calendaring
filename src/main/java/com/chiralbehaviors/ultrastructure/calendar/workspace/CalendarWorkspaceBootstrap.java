@@ -15,278 +15,82 @@
  */
 package com.chiralbehaviors.ultrastructure.calendar.workspace;
 
+import javax.persistence.EntityManager;
+
+import com.chiralbehaviors.CoRE.attribute.Attribute;
+import com.chiralbehaviors.CoRE.attribute.ValueType;
 import com.chiralbehaviors.CoRE.attribute.unit.Unit;
-import com.chiralbehaviors.CoRE.network.Relationship;
+import com.chiralbehaviors.CoRE.kernel.Kernel;
+import com.chiralbehaviors.CoRE.meta.Model;
+import com.chiralbehaviors.CoRE.network.Aspect;
 import com.chiralbehaviors.CoRE.time.Interval;
 
 /**
  * @author hparry
  *
  */
-public class CalendarWorkspaceBootstrap implements CalendarWorkspace {
+public class CalendarWorkspaceBootstrap extends ReadOnlyCalendarWorkspace {
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getMillisecond()
-     */
-    public Interval getMillisecond() {
-        // TODO Auto-generated method stub
-        return null;
+    private Model         model;
+    private EntityManager em;
+    private Kernel        kernel;
+
+    public CalendarWorkspaceBootstrap(Model model) {
+        this.model = model;
+        this.em = model.getEntityManager();
+        this.kernel = model.getKernel();
     }
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getSecond()
-     */
-    public Interval getSecond() {
-        // TODO Auto-generated method stub
-        return null;
+    public void createWorkspace() {
+        createUnits();
+        createAttributes();
+        createIntervals();
+        authorizeAttributes();
     }
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getMinute()
+    /**
+     * 
      */
-    public Interval getMinute() {
-        // TODO Auto-generated method stub
-        return null;
+    private void authorizeAttributes() {
+        model.getIntervalModel().authorize(new Aspect<Interval>(
+                                                                kernel.getIsA(),
+                                                                gregorianCalendar),
+                                           endDate);
+
     }
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getHour()
+    /**
+     * 
      */
-    public Interval getHour() {
-        // TODO Auto-generated method stub
-        return null;
+    private void createIntervals() {
+        gregorianCalendar = model.getIntervalModel().newDefaultInterval("Gregorian Calendar",
+                                                                        "The Gregorian Calendar interval supertype");
     }
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getDay()
+    /**
+     * 
      */
-    public Interval getDay() {
-        // TODO Auto-generated method stub
-        return null;
+    private void createAttributes() {
+        endDate = new Attribute("End Date", "The end date attribute",
+                                kernel.getCore());
+        endDate.setValueType(ValueType.NUMERIC);
+        em.persist(endDate);
+
     }
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getYear()
+    /**
+     * 
      */
-    public Interval getYear() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    private void createUnits() {
+        milliseconds = new Unit("Milliseconds", "The milliseconds unit",
+                                kernel.getCore());
+        em.persist(milliseconds);
 
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getSunday()
-     */
-    public Interval getSunday() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getMonday()
-     */
-    public Interval getMonday() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getTuesday()
-     */
-    public Interval getTuesday() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getWednesday()
-     */
-    public Interval getWednesday() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getThursday()
-     */
-    public Interval getThursday() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getFriday()
-     */
-    public Interval getFriday() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getSaturday()
-     */
-    public Interval getSaturday() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getJanuary()
-     */
-    public Interval getJanuary() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getFebruary()
-     */
-    public Interval getFebruary() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getMarch()
-     */
-    public Interval getMarch() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getApril()
-     */
-    public Interval getApril() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getMay()
-     */
-    public Interval getMay() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getJune()
-     */
-    public Interval getJune() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getJuly()
-     */
-    public Interval getJuly() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getAugust()
-     */
-    public Interval getAugust() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getSeptember()
-     */
-    public Interval getSeptember() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getOctober()
-     */
-    public Interval getOctober() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getNovember()
-     */
-    public Interval getNovember() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getDecember()
-     */
-    public Interval getDecember() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getOnDay()
-     */
-    public Relationship getOnDay() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getDayOf()
-     */
-    public Relationship getDayOf() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getInMonth()
-     */
-    public Relationship getInMonth() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getMonthOf()
-     */
-    public Relationship getMonthOf() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getInYear()
-     */
-    public Relationship getInYear() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getYearOf()
-     */
-    public Relationship getYearOf() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getMillisSinceEpoch()
-     */
-    public Unit getMillisSinceEpoch() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getMilliseconds()
-     */
-    public Unit getMilliseconds() {
-        // TODO Auto-generated method stub
-        return null;
+        millisSinceEpoch = new Unit(
+                                    "MillisSinceEpoch",
+                                    "The unit representing the number of milliseconds since the epoch",
+                                    kernel.getCore());
+        em.persist(millisSinceEpoch);
     }
 
 }

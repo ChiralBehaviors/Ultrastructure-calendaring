@@ -14,36 +14,55 @@
  * limitations under the License.
  */
 package com.chiralbehaviors.ultrastructure.calendar.workspace;
+
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Calendar;
+import java.time.Instant;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.chiralbehaviors.CoRE.attribute.Attribute;
+import com.chiralbehaviors.CoRE.attribute.ValueType;
+import com.chiralbehaviors.CoRE.attribute.unit.Unit;
+import com.chiralbehaviors.CoRE.meta.models.AbstractModelTest;
 import com.chiralbehaviors.CoRE.time.Interval;
-import com.chiralbehaviors.ultrastructure.calendar.archetype.DateArchetype;
-import com.chiralbehaviors.ultrastructure.calendar.transformer.CalendarTransformer;
+import com.chiralbehaviors.ultrastructure.calendar.archetype.Event;
 
 /**
  * @author hparry
  *
  */
-public class CalendarTranslationTest {
-    
+public class CalendarTranslationTest extends AbstractModelTest {
+
+    private static CalendarWorkspaceBootstrap calWs;
+
+    @BeforeClass
+    public static void init() {
+        calWs = new CalendarWorkspaceBootstrap(model);
+        calWs.createWorkspace();
+    }
+
     @Test
-    public void testTranslate() {
-        Calendar cal = Calendar.getInstance();
-        cal.clear();
-        cal.set(1996, Calendar.JANUARY, 1);
-        
-        Interval date = new Interval("Jan 1, 1996", null, null);
-        CalendarTransformer transformer = mock(CalendarTransformer.class);
-        when(transformer.getInterval(cal)).thenReturn(date);
-        DateArchetype arch = mock(DateArchetype.class);
-        when(arch.getDayOfMonth()).thenReturn(new Interval("1", null, null));
-        when(arch.getMonth()).thenReturn(new Interval("January", null, null));
-        when(arch.getYear()).thenReturn(new Interval("1996", null, null));
+    public void testStartDate() {
+        em.getTransaction().begin();
+        Instant now = Instant.now();
+        Event surviveThisMeeting = new Event("Survive this meeting",
+                                             "christ it will never end", now,
+                                             calWs, model);
+        em.getTransaction().commit();
+
+        em.getTransaction().begin();
+        Instant later = Instant.ofEpochMilli(now.getEpochSecond() + 20);
+        surviveThisMeeting.setEndDate(later);
+        em.getTransaction().commit();
+
+        assertEquals(later.toEpochMilli(),
+                     surviveThisMeeting.getInterval().getStart().longValue()
+                             + surviveThisMeeting.getInterval().getDuration().longValue());
+
     }
 
 }
