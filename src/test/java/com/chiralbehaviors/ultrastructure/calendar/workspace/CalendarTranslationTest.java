@@ -16,19 +16,13 @@
 package com.chiralbehaviors.ultrastructure.calendar.workspace;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.time.Instant;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.chiralbehaviors.CoRE.attribute.Attribute;
-import com.chiralbehaviors.CoRE.attribute.ValueType;
-import com.chiralbehaviors.CoRE.attribute.unit.Unit;
 import com.chiralbehaviors.CoRE.meta.models.AbstractModelTest;
-import com.chiralbehaviors.CoRE.time.Interval;
 import com.chiralbehaviors.ultrastructure.calendar.archetype.Event;
 
 /**
