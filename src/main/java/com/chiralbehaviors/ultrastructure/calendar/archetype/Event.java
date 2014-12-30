@@ -58,6 +58,26 @@ public class Event {
         this.interval = facet.asRuleform();
         setEndDate(endDate);
     }
+    
+    @SuppressWarnings("unchecked")
+    public Event(String name, String description, Instant startDate, Instant endDate,
+                 CalendarWorkspace workspace, Model model) {
+        this.model = model;
+        this.workspace = workspace;
+        long duration = endDate.toEpochMilli() - startDate.toEpochMilli();
+        isGregorianCalendar = new Aspect<Interval>(
+                                                   model.getKernel().getIsA(),
+                                                   workspace.getGregorianCalendar());
+        facet = model.getIntervalModel().create(name,
+                                                description,
+                                                BigDecimal.valueOf(startDate.toEpochMilli()),
+                                                workspace.getMillisSinceEpoch(),
+                                                BigDecimal.valueOf(duration),
+                                                workspace.getMilliseconds(),
+                                                isGregorianCalendar);
+        this.interval = facet.asRuleform();
+        setEndDate(endDate);
+    }
 
     public Interval getInterval() {
         return interval;
