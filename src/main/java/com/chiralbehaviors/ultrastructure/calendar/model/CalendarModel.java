@@ -19,6 +19,8 @@ import java.util.List;
 
 import com.chiralbehaviors.CoRE.meta.IntervalModel;
 import com.chiralbehaviors.CoRE.time.Interval;
+import com.google.ical.iter.RecurrenceIterator;
+import com.google.ical.values.TimeValue;
 
 /**
  * @author hparry
@@ -29,5 +31,7 @@ public interface CalendarModel extends IntervalModel {
     List<Interval> getEventsWithin(Interval period);
     
     List<Interval> getEventsOverlapping(Interval period);
+    
+    Interval createRecurringEvent(String name, String description, TimeValue time, long durationInMillis, RecurrenceIterator iter);
 
 }

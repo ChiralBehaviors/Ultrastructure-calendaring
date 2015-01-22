@@ -17,6 +17,7 @@ package com.chiralbehaviors.ultrastructure.calendar.workspace;
 
 import com.chiralbehaviors.CoRE.attribute.Attribute;
 import com.chiralbehaviors.CoRE.attribute.unit.Unit;
+import com.chiralbehaviors.CoRE.network.Relationship;
 import com.chiralbehaviors.CoRE.time.Interval;
 
 /**
@@ -29,6 +30,8 @@ public class ReadOnlyCalendarWorkspace implements CalendarWorkspace {
     protected Interval  gregorianCalendar;
     protected Unit      milliseconds;
     protected Unit      millisSinceEpoch;
+    protected Relationship inRecurrence;
+    protected Relationship hasOccurrence;
 
     /* (non-Javadoc)
      * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getMillisSinceEpoch()
@@ -60,6 +63,22 @@ public class ReadOnlyCalendarWorkspace implements CalendarWorkspace {
     @Override
     public Attribute getEndDate() {
         return endDate;
+    }
+
+    /* (non-Javadoc)
+     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getInRecurrence()
+     */
+    @Override
+    public Relationship getInRecurrence() {
+        return inRecurrence;
+    }
+
+    /* (non-Javadoc)
+     * @see com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace#getHasOccurrence()
+     */
+    @Override
+    public Relationship getHasOccurrence() {
+        return hasOccurrence;
     }
 
 }

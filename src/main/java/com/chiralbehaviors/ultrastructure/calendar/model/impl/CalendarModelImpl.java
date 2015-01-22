@@ -37,6 +37,12 @@ import com.chiralbehaviors.CoRE.time.IntervalAttributeAuthorization;
 import com.chiralbehaviors.CoRE.time.IntervalNetwork;
 import com.chiralbehaviors.ultrastructure.calendar.model.CalendarModel;
 import com.chiralbehaviors.ultrastructure.calendar.workspace.CalendarWorkspace;
+import com.google.ical.iter.RecurrenceIterator;
+import com.google.ical.util.TimeUtils;
+import com.google.ical.values.DateTimeValue;
+import com.google.ical.values.DateTimeValueImpl;
+import com.google.ical.values.DateValue;
+import com.google.ical.values.TimeValue;
 
 /**
  * @author hparry
@@ -73,7 +79,7 @@ public class CalendarModelImpl implements CalendarModel {
     @Override
     public List<Interval> getEventsWithin(Interval period) {
         TypedQuery<Interval> query = em.createQuery(GET_EVENTS_WITHIN,
-                                                         Interval.class);
+                                                    Interval.class);
         query.setParameter("relationship", model.getKernel().getIsA());
         query.setParameter("child", ws.getGregorianCalendar());
         query.setParameter("start", period.getStart());
@@ -110,7 +116,7 @@ public class CalendarModelImpl implements CalendarModel {
                                                      BigDecimal start,
                                                      Unit startUnit,
                                                      Aspect<Interval> aspect,
-                                                     @SuppressWarnings( "unchecked") Aspect<Interval>... aspects) {
+                                                     @SuppressWarnings("unchecked") Aspect<Interval>... aspects) {
         return intModel.create(name, description, start, startUnit, aspect,
                                aspects);
     }
@@ -168,7 +174,8 @@ public class CalendarModelImpl implements CalendarModel {
      *      java.lang.String, com.chiralbehaviors.CoRE.network.Aspect,
      *      com.chiralbehaviors.CoRE.network.Aspect[])
      */
-    public Interval create(String name, String description,
+    public Interval create(String name,
+                           String description,
                            Aspect<Interval> aspect,
                            @SuppressWarnings("unchecked") Aspect<Interval>... aspects) {
         return intModel.create(name, description, aspect, aspects);
@@ -506,6 +513,41 @@ public class CalendarModelImpl implements CalendarModel {
      */
     public void propagate() {
         intModel.propagate();
+    }
+
+    /* (non-Javadoc)
+     * @see com.chiralbehaviors.ultrastructure.calendar.model.CalendarModel#createRecurringEvent(com.google.ical.iter.RecurrenceIterable)
+     */
+    @Override
+    public Interval createRecurringEvent(String name, String description,
+                                         TimeValue time, long durationInMillis,
+                                         RecurrenceIterator iter) {
+        Interval recurrence = newDefaultInterval(name, description);
+        while (iter.hasNext()) {
+            DateValue date = iter.next();
+            long dateTime = calculateTimeValue(time, date);
+            Interval occurrence = create(
+                                         name,
+                                         description,
+                                         new Aspect<Interval>(
+                                                              ws.getInRecurrence(),
+                                                              recurrence)).asRuleform();
+            occurrence.setStart(BigDecimal.valueOf(dateTime));
+            occurrence.setStartUnit(ws.getMillisSinceEpoch());
+            occurrence.setDuration(BigDecimal.valueOf(durationInMillis));
+            occurrence.setDurationUnit(ws.getMilliseconds());
+        }
+        return recurrence;
+    }
+
+    /**
+     * @param time
+     * @param date
+     * @return
+     */
+    private long calculateTimeValue(TimeValue time, DateValue date) {
+        DateTimeValue dtv = new DateTimeValueImpl(date.year(), date.month(), date.day(), time.hour(), time.minute(), time.second());
+        return TimeUtils.secsSinceEpoch(dtv) * 1000;
     }
 
 }

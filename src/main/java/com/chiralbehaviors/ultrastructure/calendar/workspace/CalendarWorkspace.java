@@ -17,6 +17,7 @@ package com.chiralbehaviors.ultrastructure.calendar.workspace;
 
 import com.chiralbehaviors.CoRE.attribute.Attribute;
 import com.chiralbehaviors.CoRE.attribute.unit.Unit;
+import com.chiralbehaviors.CoRE.network.Relationship;
 import com.chiralbehaviors.CoRE.time.Interval;
 
 /**
@@ -34,6 +35,10 @@ public interface CalendarWorkspace {
     
     //attributes
     Attribute getEndDate();
+    
+    //relationships
+    Relationship getInRecurrence();
+    Relationship getHasOccurrence();
     
 
 }

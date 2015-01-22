@@ -23,6 +23,7 @@ import com.chiralbehaviors.CoRE.attribute.unit.Unit;
 import com.chiralbehaviors.CoRE.kernel.Kernel;
 import com.chiralbehaviors.CoRE.meta.Model;
 import com.chiralbehaviors.CoRE.network.Aspect;
+import com.chiralbehaviors.CoRE.network.Relationship;
 import com.chiralbehaviors.CoRE.time.Interval;
 
 /**
@@ -45,7 +46,23 @@ public class CalendarWorkspaceBootstrap extends ReadOnlyCalendarWorkspace {
         createUnits();
         createAttributes();
         createIntervals();
+        createRelationships();
         authorizeAttributes();
+    }
+
+    /**
+     * 
+     */
+    private void createRelationships() {
+        inRecurrence = new Relationship("InRecurrence", "Single occurrence A is in recurrence B", kernel.getCore());
+        em.persist(inRecurrence);
+        
+        hasOccurrence = new Relationship("HasOccurrence", "Recurrence pattern B has occurrence A", kernel.getCore());
+        em.persist(hasOccurrence);
+        
+        inRecurrence.setInverse(hasOccurrence);
+        hasOccurrence.setInverse(inRecurrence);
+        
     }
 
     /**
